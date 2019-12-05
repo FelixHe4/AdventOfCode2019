@@ -3,17 +3,22 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class Day3 {
 
 	static HashSet<String> hs;
+	static HashMap<String, Long> hm;
 
 	public static void main(String[] args) throws IOException {
 		String s = readLine(), s2 = readLine();
 		hs = new HashSet<String>();
+		hm = new HashMap<String, Long>();
 		solve(s, true);
 		println(solve(s2, false));
+		solve2(s, true);
+		println(solve2(s2, false));
 		exit();
 	}
 
@@ -61,7 +66,7 @@ public class Day3 {
 					for (int j = 0; j < x; j++) {
 						curX++;
 						if (hs.contains(curX + " " + curY)) {
-							System.out.println(curX + " " + curY);
+							// System.out.println(curX + " " + curY);
 							mindist = Math.min(Math.abs(7000 - curY) + Math.abs(7000 - curX), mindist);
 						}
 					}
@@ -69,7 +74,7 @@ public class Day3 {
 					for (int j = 0; j < x; j++) {
 						curX--;
 						if (hs.contains(curX + " " + curY)) {
-							System.out.println(curX + " " + curY);
+							// System.out.println(curX + " " + curY);
 							mindist = Math.min(Math.abs(7000 - curY) + Math.abs(7000 - curX), mindist);
 						}
 					}
@@ -77,7 +82,7 @@ public class Day3 {
 					for (int j = 0; j < x; j++) {
 						curY--;
 						if (hs.contains(curX + " " + curY)) {
-							System.out.println(curX + " " + curY);
+							// System.out.println(curX + " " + curY);
 							mindist = Math.min(Math.abs(7000 - curY) + Math.abs(7000 - curX), mindist);
 						}
 					}
@@ -85,7 +90,7 @@ public class Day3 {
 					for (int j = 0; j < x; j++) {
 						curY++;
 						if (hs.contains(curX + " " + curY)) {
-							System.out.println(curX + " " + curY);
+							// System.out.println(curX + " " + curY);
 							mindist = Math.min(Math.abs(7000 - curY) + Math.abs(7000 - curX), mindist);
 						}
 					}
@@ -94,6 +99,95 @@ public class Day3 {
 				// System.out.println(curX + " " + curY);
 			}
 			return mindist;
+		}
+	}
+
+	public static long solve2(String s, boolean uhh) {
+		if (uhh) {
+			String[] arr = s.split(",");
+			int curX = 7000, curY = 7000;
+			long counter = 0;
+			for (int i = 0; i < arr.length; i++) {
+				char cur = arr[i].charAt(0);
+				int x = Integer.parseInt(arr[i].substring(1));
+				if (cur == 'R') {
+					for (int j = 0; j < x; j++) {
+						curX++;
+						counter++;
+						hm.put(curX + " " + curY, counter);
+					}
+				} else if (cur == 'L') {
+					for (int j = 0; j < x; j++) {
+						curX--;
+						counter++;
+						hm.put(curX + " " + curY, counter);
+					}
+				} else if (cur == 'D') {
+					for (int j = 0; j < x; j++) {
+						curY--;
+						counter++;
+						hm.put(curX + " " + curY, counter);
+					}
+				} else if (cur == 'U') {
+					for (int j = 0; j < x; j++) {
+						curY++;
+						counter++;
+						hm.put(curX + " " + curY, counter);
+					}
+				}
+				// System.out.println(mindist);
+				// System.out.println(curX + " " + curY);
+			}
+			return 0;
+		} else {
+			String[] arr = s.split(",");
+			int curX = 7000, curY = 7000;
+			long walkdist = Integer.MAX_VALUE;
+			long counter = 0;
+			for (int i = 0; i < arr.length; i++) {
+				char cur = arr[i].charAt(0);
+				int x = Integer.parseInt(arr[i].substring(1));
+				if (cur == 'R') {
+					for (int j = 0; j < x; j++) {
+						curX++;
+						counter++;
+						if (hm.containsKey(curX + " " + curY)) {
+							// System.out.println(curX + " " + curY);
+							walkdist = Math.min(walkdist, hm.get(curX + " " + curY) + counter);
+						}
+					}
+				} else if (cur == 'L') {
+					for (int j = 0; j < x; j++) {
+						curX--;
+						counter++;
+						if (hm.containsKey(curX + " " + curY)) {
+							// System.out.println(curX + " " + curY);
+							walkdist = Math.min(walkdist, hm.get(curX + " " + curY) + counter);
+						}
+					}
+				} else if (cur == 'D') {
+					for (int j = 0; j < x; j++) {
+						curY--;
+						counter++;
+						if (hm.containsKey(curX + " " + curY)) {
+							// System.out.println(curX + " " + curY);
+							walkdist = Math.min(walkdist, hm.get(curX + " " + curY) + counter);
+						}
+					}
+				} else if (cur == 'U') {
+					for (int j = 0; j < x; j++) {
+						curY++;
+						counter++;
+						if (hm.containsKey(curX + " " + curY)) {
+							// System.out.println(curX + " " + curY);
+							walkdist = Math.min(walkdist, hm.get(curX + " " + curY) + counter);
+						}
+					}
+				}
+
+				// System.out.println(curX + " " + curY);
+			}
+			return walkdist;
 		}
 	}
 
